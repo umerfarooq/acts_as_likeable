@@ -1,0 +1,71 @@
+ActsAsLikeable
+==============
+
+== Resources
+
+Install
+ * Run the following command:
+ * Not on any repository yet
+
+ * Create a new rails migration and add the following self.up and self.down methods
+
+  def self.up
+    create_table "likings", :force => true do |t|
+      t.column "liking", :boolean, :default => false
+      t.column "created_at", :datetime, :null => false
+      t.column "likeable_type", :string, :limit => 15, :default => "", :null => false
+      t.column "likeable_id", :integer, :default => 0, :null => false
+      t.column "user_id", :integer, :default => 0, :null => false
+    end
+
+    add_index "likings", ["user_id"], :name => "fk_likings_user"
+  end
+
+  def self.down
+    drop_table :likings
+  end
+
+== Usage
+ * Make your ActiveRecord model act as likeable.
+
+ class Model < ActiveRecord::Base
+    acts_as_likeable
+ end
+
+ * Add a liking to a model instance
+
+ model = Model.new
+ liking = Liking.new(:liking => 1) (0=dislike, 1=like)
+ model.likings << liking / model.add_liking(liking)
+
+ * Each liking references the likeable object
+
+ model = Model.find(1)
+ model.likings.get(0).likeable == model
+
+ * Count total likes of the likeable object
+
+ model.find(1)
+ model.likes_count (Count of Likes)
+
+ * Count total dislikes of the likeable object
+
+ model.find(1)
+ model.dislikes_count (Count of DisLikes)
+
+* Count percentage of likes to dislikes for the likeable object
+
+ model.find(1)
+ model.likes_percentage
+
+* Count percentage of dislikes to likes for the likeable object
+
+ model.find(1)
+ model.dislikes_percentage
+
+== Inspiration
+
+This Plugin is heavily influenced by acts_as_voteable & acts_as_rateable,
+can be used for Thumbs Up/Down or Likes/Dislikes situations, also helps to
+get the Percentage of Likes to Dislikes and vice versa on an Object, to depict
+average popularity.
