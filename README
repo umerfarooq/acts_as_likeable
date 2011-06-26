@@ -5,7 +5,7 @@ ActsAsLikeable
 
 Install
  * Run the following command:
- * Not on any repository yet
+ * ./script/plugin install git@github.com:umerfarooq/acts_as_likeable.git
 
  * Create a new rails migration and add the following self.up and self.down methods
 
